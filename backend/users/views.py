@@ -55,7 +55,7 @@ class UserViewSet(viewsets.ModelViewSet):
                                 status=status.HTTP_201_CREATED)
             return Response({'errors': 'Объект не найден'},
                             status=status.HTTP_404_NOT_FOUND)
-                            
+
         if not user.follower.filter(author=author).exists():
             return Response({'errors': 'Объект не найден'},
                             status=status.HTTP_404_NOT_FOUND)

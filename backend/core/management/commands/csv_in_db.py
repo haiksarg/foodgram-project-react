@@ -1,7 +1,7 @@
 import csv
 
 from django.core.management import BaseCommand
-# Import the model 
+# Import the model
 from recipes.models import Ingredient
 
 ALREDY_LOADED_ERROR_MESSAGE = """
@@ -16,22 +16,22 @@ class Command(BaseCommand):
     help = "Loads data from ingredients.csv"
 
     def handle(self, *args, **options):
-    
+
         # Show this if the data already exist in the database
         if Ingredient.objects.exists():
             print('Ingredient data already loaded...exiting.')
             print(ALREDY_LOADED_ERROR_MESSAGE)
             return
-            
+
         # Show this before loading the data into the database
         print("Loading ingredients data")
 
-
-        #Code to load the data into database
-        with open('../data/ingredients.csv', 'r', encoding='utf-8') as csv_file:
-                reader = csv.reader(csv_file)
-                for row in reader:
-                    Ingredient.objects.get_or_create(
-                        name=row[0], measurement_unit=row[1]
-                    )
-        print(f'The data from the ingredients.csv has been uploaded successfully')
+        # Code to load the data into database
+        with open('../data/ingredients.csv', 'r', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                Ingredient.objects.get_or_create(
+                    name=row[0], measurement_unit=row[1]
+                )
+        print('The data from the ingredients.csv '
+              'has been uploaded successfully')
