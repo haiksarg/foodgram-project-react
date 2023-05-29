@@ -1,9 +1,10 @@
-from core.serializers import Base64ImageField, Hex2NameColor
 from django.shortcuts import get_object_or_404
-from recipes.models import (Favorite, Ingredient, IngredientRecipe, Recipe,
-                            ShoppingCart, Tag)
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
+from core.serializers import Base64ImageField, Hex2NameColor
+from recipes.models import (Favorite, Ingredient, IngredientRecipe, Recipe,
+                            ShoppingCart, Tag)
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -128,9 +129,7 @@ class ReadRecipeSerialzer(serializers.ModelSerializer):
         read_only_fields = ('author', 'tags', 'ingredients', )
 
     def get_image(self, recipe):
-        request = self.context.get('request')
-        image = recipe.image.url
-        return request.build_absolute_uri(image)
+        return recipe.image.url
 
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
@@ -145,15 +144,6 @@ class ReadRecipeSerialzer(serializers.ModelSerializer):
             return self.context.get('request').user.shopping_cart.filter(
                     recipe=obj).exists()
         return False
-
-
-class MiniRecipeSerialzer(serializers.ModelSerializer):
-    image = Base64ImageField()
-
-    class Meta:
-        model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time')
-        read_only_fields = fields
 
 
 class FavoriteSerializer(serializers.ModelSerializer):

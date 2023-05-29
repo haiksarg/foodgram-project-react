@@ -1,8 +1,7 @@
-from api.serializers import MiniRecipeSerialzer
-from recipes.models import Recipe
 from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
 
+from recipes.models import Recipe
 from .models import Follow, User
 
 
@@ -24,6 +23,18 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
+
+
+class MiniRecipeSerialzer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'image', 'cooking_time')
+        read_only_fields = fields
+
+    def get_image(self, recipe):
+        return recipe.image.url
 
 
 class FollowSerializer(serializers.ModelSerializer):

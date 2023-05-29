@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
+
 from users.models import User
 
 
@@ -186,7 +187,7 @@ class Favorite(models.Model):
     )
 
     class Meta:
-        verbose_name_plural = 'список покупок'
+        verbose_name_plural = 'список избранных'
         constraints = [
             models.UniqueConstraint(
                 name='unique_favorite',

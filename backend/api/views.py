@@ -1,9 +1,6 @@
-from core.mixins import RetrieveListViewSet
-from core.utils import shopping_cart
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from recipes.models import Ingredient, Recipe, Tag
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, AllowAny, IsAuthenticated
@@ -13,9 +10,12 @@ from .filters import IngredientSearchFilter, RecipeFilter
 from .paginations import ApiPagination
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (FavoriteSerializer, IngredientSerializer,
-                          MiniRecipeSerialzer, ReadRecipeSerialzer,
-                          ShoppingCartSerializer, TagSerializer,
-                          WriteRecipeSerialzer)
+                          ReadRecipeSerialzer, ShoppingCartSerializer,
+                          TagSerializer, WriteRecipeSerialzer)
+from core.mixins import RetrieveListViewSet
+from core.utils import shopping_cart
+from recipes.models import Ingredient, Recipe, Tag
+from users.serializers import MiniRecipeSerialzer
 
 
 class TagViewSet(RetrieveListViewSet):

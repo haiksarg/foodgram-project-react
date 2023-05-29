@@ -1,7 +1,7 @@
 import csv
 
 from django.core.management import BaseCommand
-# Import the model
+
 from recipes.models import Ingredient
 
 ALREDY_LOADED_ERROR_MESSAGE = """

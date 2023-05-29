@@ -1,7 +1,8 @@
-from core.validators import validate_username
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+from core.validators import validate_username
 
 
 class User(AbstractUser):
@@ -26,6 +27,10 @@ class User(AbstractUser):
         'пароль',
         max_length=settings.NAME_LIMIT,
     )
+
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+
+    USERNAME_FIELD = 'email'
 
     class Meta:
         ordering = ('first_name', 'last_name',)
