@@ -1,31 +1,33 @@
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from core import constants
 from core.validators import validate_username
 
 
 class User(AbstractUser):
     username = models.SlugField(
+        'имя пользователя',
         validators=(validate_username,),
-        max_length=settings.NAME_LIMIT,
+        max_length=constants.NAME_LIMIT,
         unique=True,
     )
     email = models.EmailField(
-        max_length=settings.EMAIL_LIMIT,
+        'почта',
+        max_length=constants.EMAIL_LIMIT,
         unique=True,
     )
     first_name = models.CharField(
         'имя',
-        max_length=settings.NAME_LIMIT,
+        max_length=constants.NAME_LIMIT,
     )
     last_name = models.CharField(
         'фамилия',
-        max_length=settings.NAME_LIMIT,
+        max_length=constants.NAME_LIMIT,
     )
     password = models.CharField(
         'пароль',
-        max_length=settings.NAME_LIMIT,
+        max_length=constants.NAME_LIMIT,
     )
 
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
@@ -66,12 +68,12 @@ class Follow(models.Model):
         constraints = [
             models.UniqueConstraint(
                 name='unique_following',
-                fields=["user", "author"],),
+                fields=['user', 'author'],),
             models.CheckConstraint(
                 name='prevent_self_follow',
-                check=~models.Q(user=models.F("author")),),
+                check=~models.Q(user=models.F('author')),),
         ]
 
     def __str__(self):
-        return (f'Пользователь {self.user.username}'
+        return (f'Пользователь {self.user.username} '
                 f'подписан на {self.author.username}')

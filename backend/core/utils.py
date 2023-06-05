@@ -1,18 +1,9 @@
 from datetime import date
 
-from django.db.models import Sum
 from django.http import HttpResponse
 
-from recipes.models import IngredientRecipe
 
-
-def shopping_cart(self, request, user):
-    sum_ingredients_in_recipes = IngredientRecipe.objects.filter(
-        recipe__shopping_cart__user=user
-    ).values(
-        'ingredient__name', 'ingredient__measurement_unit'
-    ).annotate(
-        amounts=Sum('amount', distinct=True)).order_by('amounts')
+def shopping_cart(self, request, sum_ingredients_in_recipes):
     today = date.today().strftime("%d-%m-%Y")
     shopping_list = f'Список покупок на: {today}\n\n'
     for ingredient in sum_ingredients_in_recipes:

@@ -1,11 +1,12 @@
 import re
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
+
+from core import constants
 
 
 def validate_username(value):
-    invalid_characters = re.sub(settings.REG_PATTERN, '', value)
+    invalid_characters = re.sub(constants.USERNAME_PATTERN, '', value)
     if invalid_characters:
         raise ValidationError(
             f'Недопустимые символы: {invalid_characters}')
@@ -15,3 +16,10 @@ def validate_username(value):
             params={'value': value},
         )
     return value
+
+
+def validate_hexname(value):
+    invalid_characters = re.sub(constants.HEX_NAME_PATTERN, '', value)
+    if invalid_characters:
+        raise ValidationError(
+            f'Недопустимые символы: {invalid_characters}')

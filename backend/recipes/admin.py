@@ -8,26 +8,31 @@ from .models import (Favorite, Ingredient, IngredientRecipe, Recipe,
 class IngredientsInline(admin.TabularInline):
     model = IngredientRecipe
     extra = 3
+    min_num = 1
 
 
+@admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('user', 'recipe')
     list_filter = ('user',)
     search_fields = ('user',)
 
 
+@admin.register(ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
     list_display = ('user', 'recipe')
     list_filter = ('user',)
     search_fields = ('user',)
 
 
+@admin.register(IngredientRecipe)
 class IngredientRecipeAdmin(admin.ModelAdmin):
     list_display = ('id', 'recipe', 'ingredient', 'amount',)
     list_filter = ('recipe', 'ingredient')
     search_fields = ('name',)
 
 
+@admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('id', 'author', 'name', 'pub_date', 'in_favorite', )
     search_fields = ('name',)
@@ -35,29 +40,25 @@ class RecipeAdmin(admin.ModelAdmin):
     filter_horizontal = ('ingredients',)
     empty_value_display = '-пусто-'
     inlines = [IngredientsInline]
+    raw_id_fields = ('ingredients',)
 
+    @admin.display(description='Добавленные рецепты в избранное')
     def in_favorite(self, obj):
         return obj.favorite.all().count()
 
-    in_favorite.short_description = 'Добавленные рецепты в избранное'
 
-
+@admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'slug', 'color')
     list_filter = ('name',)
     search_fields = ('name',)
 
 
+@admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit')
     list_filter = ('name',)
     search_fields = ('name',)
 
 
-admin.site.register(Recipe, RecipeAdmin)
-admin.site.register(Ingredient, IngredientAdmin)
-admin.site.register(Tag, TagAdmin)
-admin.site.register(IngredientRecipe, IngredientRecipeAdmin)
-admin.site.register(Favorite, FavoriteAdmin)
-admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.unregister(Group)

@@ -132,23 +132,10 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = 'users.User'
 
-NAME_LIMIT = 150
-
-EMAIL_LIMIT = 254
-
-COLOR_LIMIT = 7
-
-OTHER_NAME_LIMIT = 200
-
-REG_PATTERN = r'[\w\.@+-]+'
-
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'SERIALIZERS': {
         'user': 'users.serializers.UserSerializer',
-    },
-    'PERMISSIONS': {
-        'user': ['api.permissions.IsCurrentUserOrAdminOrReadOnly']
     }
 }
 

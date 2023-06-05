@@ -8,6 +8,7 @@ django-filter==21.1
 django-cors-headers 
 djangorestframework==3.12.4
 djangorestframework-simplejwt==4.7.2
+drf-extra-fields
 gunicorn==20.0.4
 idna==3.3
 importlib-metadata==4.11.3

@@ -1,0 +1,11 @@
+NAME_LIMIT = 150
+
+EMAIL_LIMIT = 254
+
+COLOR_LIMIT = 7
+
+OTHER_NAME_LIMIT = 200
+
+USERNAME_PATTERN = r'[\w\.@+-]+'
+
+HEX_NAME_PATTERN = r'#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})'

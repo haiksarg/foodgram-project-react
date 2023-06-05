@@ -14,7 +14,7 @@ class CustomUserViewSet(UserViewSet):
     pagination_class = ApiPagination
 
     @action(detail=True,
-            methods=['post', 'delete'],
+            methods=['post'],
             permission_classes=[IsAuthenticated])
     def subscribe(self, request, id):
         author = get_object_or_404(User, id=id)
@@ -23,13 +23,15 @@ class CustomUserViewSet(UserViewSet):
             serializer = FollowSerializer(
                 data={'user': user, 'author': author},
                 context={'request': request, 'author': author})
-            if serializer.is_valid(raise_exception=True):
-                serializer.save(author=author, user=user)
-                return Response(serializer.data,
-                                status=status.HTTP_201_CREATED)
-            return Response({'errors': 'Объект не найден'},
-                            status=status.HTTP_404_NOT_FOUND)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(author=author, user=user)
+            return Response(serializer.data,
+                            status=status.HTTP_201_CREATED)
 
+    @subscribe.mapping.delete
+    def delete_subscribe(self, request, id):
+        author = get_object_or_404(User, id=id)
+        user = self.request.user
         if not user.follower.filter(author=author).exists():
             return Response({'errors': 'Объект не найден'},
                             status=status.HTTP_404_NOT_FOUND)
