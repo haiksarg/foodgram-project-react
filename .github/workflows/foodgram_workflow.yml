@@ -23,7 +23,7 @@ jobs:
       
         pip install flake8
       
-        pip install -r backend/requirements.txt 
+        pip install -r backend/requirements.txt
     
     - name: Test with flake8 and django tests
       run: |
