@@ -42,10 +42,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Recipe.objects.select_related(
-            'author').prefetch_related(
-                'tegs', 'ingredient').all(
-                    ).annotate_is_fav_and_is_in_shop_cart(
-                        self.request.user)
+            'author'
+        ).prefetch_related(
+            'tegs',
+            'ingredient'
+        ).all().annotate_is_fav_and_is_in_shop_cart(
+            self.request.user)
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -59,11 +61,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if user.shopping_cart.exists():
             sum_ingredients_in_recipes = IngredientRecipe.objects.filter(
-                    recipe__shopping_cart__user=user
-                ).values(
-                    'ingredient__name', 'ingredient__measurement_unit'
-                ).annotate(
-                    amounts=Sum('amount')).order_by('ingredient__name')
+                recipe__shopping_cart__user=user
+            ).values(
+                'ingredient__name', 'ingredient__measurement_unit'
+            ).annotate(
+                amounts=Sum('amount')).order_by('ingredient__name')
             return shopping_cart(self, request, sum_ingredients_in_recipes)
         return Response('Список покупок пуст.',
                         status=status.HTTP_404_NOT_FOUND)
