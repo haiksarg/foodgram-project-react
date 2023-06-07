@@ -73,7 +73,9 @@ class WriteRecipeSerialzer(serializers.ModelSerializer):
         read_only_fields = ('author', )
 
     def to_representation(self, instance):
-        return ReadRecipeSerialzer(instance).data
+        return ReadRecipeSerialzer(
+            instance,
+            context={'request': self.context.get('request')}).data
 
     def validate_ingredients(self, value):
         ingredients = value
@@ -99,12 +101,12 @@ class WriteRecipeSerialzer(serializers.ModelSerializer):
         return value
 
     def add_tags_ingredients(self, ingredients, tags, model):
-        ingredients_list = []
-        for ingredient in ingredients:
-            ingredients_list.append(IngredientRecipe(
+        ingredients_list = [
+            IngredientRecipe(
                 recipe=model,
-                ingredient=ingredient['id'],
-                amount=ingredient['amount']))
+                ingredient_id=ingredient['id'],
+                amount=ingredient['amount']
+            ) for ingredient in ingredients]
         IngredientRecipe.objects.bulk_create(
             ingredients_list,
             ignore_conflicts=True)
@@ -161,7 +163,9 @@ class FavoriteSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        return SelectRecipeSerializer(instance).data
+        return SelectRecipeSerializer(
+            instance,
+            context={'request': self.context.get('request')}).data
 
     def validate(self, data):
         user = self.context.get('request').user
@@ -179,7 +183,9 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        return SelectRecipeSerializer(instance).data
+        return SelectRecipeSerializer(
+            instance,
+            context={'request': self.context.get('request')}).data
 
     def validate(self, data):
         user = self.context.get('request').user

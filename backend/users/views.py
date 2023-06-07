@@ -19,23 +19,19 @@ class CustomUserViewSet(UserViewSet):
     def subscribe(self, request, id):
         author = get_object_or_404(User, id=id)
         user = self.request.user
-        if request.method == 'POST':
-            serializer = FollowSerializer(
-                data={'user': user, 'author': author},
-                context={'request': request, 'author': author})
-            serializer.is_valid(raise_exception=True)
-            serializer.save(author=author, user=user)
-            return Response(serializer.data,
-                            status=status.HTTP_201_CREATED)
+        serializer = FollowSerializer(
+            data={'user': user, 'author': author},
+            context={'request': request, 'author': author})
+        serializer.is_valid(raise_exception=True)
+        serializer.save(author=author, user=user)
+        return Response(serializer.data,
+                        status=status.HTTP_201_CREATED)
 
     @subscribe.mapping.delete
     def delete_subscribe(self, request, id):
-        author = get_object_or_404(User, id=id)
-        user = self.request.user
-        if not user.follower.filter(author=author).exists():
-            return Response({'errors': 'Объект не найден'},
-                            status=status.HTTP_404_NOT_FOUND)
-        user.follower.get(author=author).delete()
+        get_object_or_404(
+            Follow, user=self.request.user, author__id=id
+        ).delete()
         return Response('Успешная отписка',
                         status=status.HTTP_204_NO_CONTENT)
 

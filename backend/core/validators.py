@@ -23,3 +23,4 @@ def validate_hexname(value):
     if invalid_characters:
         raise ValidationError(
             f'Недопустимые символы: {invalid_characters}')
+    return value

@@ -34,17 +34,22 @@ class IngredientRecipeAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'author', 'name', 'pub_date', 'in_favorite', )
+    list_display = ('id', 'author', 'name',
+                    'get_ingredients', 'pub_date', 'in_favorite')
     search_fields = ('name',)
     list_filter = ('pub_date', 'author', 'name', 'tags')
     filter_horizontal = ('ingredients',)
     empty_value_display = '-пусто-'
-    inlines = [IngredientsInline]
-    raw_id_fields = ('ingredients',)
+    inlines = (IngredientsInline, )
 
-    @admin.display(description='Добавленные рецепты в избранное')
+    @admin.display(description='В избранном')
     def in_favorite(self, obj):
         return obj.favorite.all().count()
+
+    @admin.display(description='Ингредиенты')
+    def get_ingredients(self, obj):
+        return ', '.join(
+            [ingredient.name for ingredient in obj.ingredients.all()])
 
 
 @admin.register(Tag)

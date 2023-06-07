@@ -13,11 +13,11 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('username', 'email',)
     empty_value_display = '-пусто-'
 
-    @admin.display(description='recipes')
+    @admin.display(description='ерцепты')
     def get_recipes(self, obj):
         return obj.recipe.all().count()
 
-    @admin.display(description='followers')
+    @admin.display(description='подписчики')
     def get_followers(self, obj):
         return obj.following.all().count()
 

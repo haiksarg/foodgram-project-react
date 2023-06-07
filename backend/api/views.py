@@ -41,8 +41,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filterset_class = RecipeFilter
 
     def get_queryset(self):
-        return Recipe.objects.all().annotate_is_fav_and_is_in_shop_cart(
-            self.request.user)
+        return Recipe.objects.select_related(
+            'author').prefetch_related(
+                'tegs', 'ingredient').all(
+                    ).annotate_is_fav_and_is_in_shop_cart(
+                        self.request.user)
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:

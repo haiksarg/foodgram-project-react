@@ -4,7 +4,7 @@ from django.http import HttpResponse
 
 
 def shopping_cart(self, request, sum_ingredients_in_recipes):
-    today = date.today().strftime("%d-%m-%Y")
+    today = date.today().strftime('%d-%m-%Y')
     shopping_list = f'Список покупок на: {today}\n\n'
     for ingredient in sum_ingredients_in_recipes:
         shopping_list += (
