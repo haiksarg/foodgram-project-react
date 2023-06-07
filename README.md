@@ -34,7 +34,6 @@ SSH_KEY= # SSH-key компьютера, с которого будет прои
 PASSPHRASE= #Если для ssh используется фраза-пароль
 TELEGRAM_TO= #ID пользователя в Telegram
 TELEGRAM_TOKEN= #ID бота в Telegram
-
 ```
 
 Выполнить команды:
