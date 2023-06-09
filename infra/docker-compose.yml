@@ -5,9 +5,13 @@ services:
     image: postgres:13.0-alpine
     volumes:
       - db_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: progpass
     env_file:
       - ./.env
-    
+
   web:
     image: haiksarg/foodgram_back
     restart: always
