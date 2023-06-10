@@ -82,7 +82,7 @@ jobs:
             echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
             sudo docker-compose up --detach --build
             sudo docker-compose exec web python manage.py migrate
-            sudo docker-compose exec web python manage.py collectstatic --no-input
+            sudo docker-compose exec -T web python manage.py collectstatic --no-input
 
   send_message:
     runs-on: ubuntu-latest
