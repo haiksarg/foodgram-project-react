@@ -54,7 +54,7 @@ jobs:
           context: ./backend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_back
-  
+
   deploy:
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
