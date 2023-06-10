@@ -138,3 +138,5 @@ frontend/
 
 /media
 media/
+
+.vscode
