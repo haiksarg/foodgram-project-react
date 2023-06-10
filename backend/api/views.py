@@ -44,7 +44,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Recipe.objects.select_related(
             'author'
         ).prefetch_related(
-            'tegs',
+            'tags',
             'ingredient'
         ).all().annotate_is_fav_and_is_in_shop_cart(
             self.request.user)
