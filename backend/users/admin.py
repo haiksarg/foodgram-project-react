@@ -13,7 +13,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('username', 'email',)
     empty_value_display = '-пусто-'
 
-    @admin.display(description='ерцепты')
+    @admin.display(description='рецепты')
     def get_recipes(self, obj):
         return obj.recipe.all().count()
 

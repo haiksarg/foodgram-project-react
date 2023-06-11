@@ -64,13 +64,11 @@ class RecipeQuerySet(models.QuerySet):
         if user.is_authenticated:
             return self.annotate(
                 is_favorited=models.Exists(
-                    Favorite.objects.select_related(
-                        'user').filter(
-                            recipe__pk=models.OuterRef('pk'))),
+                    user.favorite.filter(
+                        recipe__pk=models.OuterRef('pk'))),
                 is_in_shopping_cart=models.Exists(
-                    ShoppingCart.objects.select_related(
-                        'user').filter(
-                            recipe__pk=models.OuterRef('pk')))
+                    user.shopping_cart.filter(
+                        recipe__pk=models.OuterRef('pk')))
             )
 
 
