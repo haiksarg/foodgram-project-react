@@ -2,7 +2,7 @@ from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
 
 from recipes.models import Recipe
-from .models import User
+from .models import Follow, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -32,7 +32,7 @@ class MiniRecipeSerialzer(serializers.ModelSerializer):
         return recipe.image.url
 
 
-class FollowSerializer(UserSerializer):
+class FollowUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField()
     recipes = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
@@ -53,6 +53,38 @@ class FollowSerializer(UserSerializer):
 
     def get_recipes_count(self, obj):
         return obj.recipe.count()
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    email = serializers.ReadOnlyField(source='author.email')
+    id = serializers.ReadOnlyField(source='author.id')
+    username = serializers.ReadOnlyField(source='author.username')
+    first_name = serializers.ReadOnlyField(source='author.first_name')
+    last_name = serializers.ReadOnlyField(source='author.last_name')
+    is_subscribed = serializers.SerializerMethodField()
+    recipes = serializers.SerializerMethodField()
+    recipes_count = serializers.ReadOnlyField(
+        source='author.recipe.all().count()')
+
+    class Meta:
+        fields = ('email', 'id', 'username', 'first_name',
+                  'last_name', 'is_subscribed', 'recipes', 'recipes_count')
+        model = Follow
+
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        return (request
+                and request.user.is_authenticated
+                and request.user.follower.filter(
+                    author=self.context.get('author')).exists())
+
+    def get_recipes(self, obj):
+        request = self.context.get('request')
+        limit = request.GET.get('recipes_limit')
+        recipes = obj.author.recipe.all()
+        if limit and limit.isdigit():
+            recipes = recipes[:int(limit)]
+        return MiniRecipeSerialzer(recipes, many=True).data
 
     def validate(self, data):
         author = self.context.get('author')

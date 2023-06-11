@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from api.paginations import ApiPagination
 from .models import Follow, User
-from .serializers import FollowSerializer
+from .serializers import FollowSerializer, FollowUserSerializer
 
 
 class CustomUserViewSet(UserViewSet):
@@ -43,7 +43,8 @@ class CustomUserViewSet(UserViewSet):
         follows = User.objects.filter(
             following__user=self.request.user)
         pages = self.paginate_queryset(follows)
-        serializer = FollowSerializer(pages,
-                                      many=True,
-                                      context={'request': request})
+        serializer = FollowUserSerializer(
+            pages,
+            many=True,
+            context={'request': request})
         return self.get_paginated_response(serializer.data)
